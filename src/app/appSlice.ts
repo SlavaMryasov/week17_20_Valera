@@ -22,7 +22,11 @@ const slice = createSlice({
         setAppInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
             state.isInitialized = action.payload.isInitialized
         }
-
+    },
+    selectors: {
+        selectStatus: sliceState => sliceState.status,
+        selectError: sliceState => sliceState.error,
+        selectIsInitialized: sliceState => sliceState.isInitialized
     }
 })
 
@@ -31,15 +35,15 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
         if (res.data.resultCode === 0) {
             dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
         } else {
-
         }
-
         dispatch(appActions.setAppInitialized({ isInitialized: true }));
     })
 }
 
 export const appReducer = slice.reducer
 export const appActions = slice.actions
+export const { selectStatus, selectError, selectIsInitialized } = slice.selectors
+export const appSliceName = slice.name
 
 export type AppInitialState = ReturnType<typeof slice.getInitialState> // для тестов
 

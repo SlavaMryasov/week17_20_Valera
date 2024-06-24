@@ -4,7 +4,7 @@ import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
-import { initializeAppTC, RequestStatusType } from './appSlice'
+import { initializeAppTC, RequestStatusType, selectIsInitialized, selectStatus } from './appSlice'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Login } from '../features/Login/Login'
 import { logoutTC } from '../features/Login/authSlice'
@@ -25,8 +25,8 @@ type PropsType = {
 }
 
 function App({ demo = false }: PropsType) {
-	const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
-	const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
+	const status = useSelector(selectStatus)
+	const isInitialized = useSelector(selectIsInitialized)
 	const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 	const dispatch = useDispatch<any>()
 
