@@ -5,6 +5,7 @@ import { authAPI, LoginParamsType } from '../../api/todolists-api'
 // import { setAppStatusAC } from '../../app/appSlice'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
 import { appActions } from 'src/app/appSlice'
+import { todolistsActions } from '../TodolistsList/todolistsSlice'
 
 
 // const initialState: InitialStateType = {
@@ -22,6 +23,9 @@ const slice = createSlice({
             // return {...state, isLoggedIn: action.payload.isLoggedIn}
             state.isLoggedIn = action.payload.isLoggedIn
         }
+    },
+    selectors: {
+        selectIsLoggedIn: state => state.isLoggedIn
     }
 })
 
@@ -49,6 +53,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
                 // dispatch(setIsLoggedInAC(false))
                 dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }))
                 dispatch(appActions.setAppStatus({ status: 'succeeded' }))
+                dispatch(todolistsActions.clearTodosData(null))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
@@ -61,3 +66,5 @@ export const logoutTC = (): AppThunk => (dispatch) => {
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
+export const { selectIsLoggedIn } = slice.selectors
+export const authSliceName = slice.name

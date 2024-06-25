@@ -4,6 +4,7 @@ import { appActions, RequestStatusType } from '../../app/appSlice'
 import { handleServerNetworkError } from '../../utils/error-utils'
 import { AppThunk } from '../../app/store';
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { fetchTasksTC } from './tasksSlice';
 
 
 const slice = createSlice({
@@ -35,11 +36,14 @@ const slice = createSlice({
             // return action.todolists.map(tl => ({ ...tl, filter: 'all', entityStatus: 'idle' }))
             action.payload.todolists.forEach(tl =>
                 state.push({ ...tl, filter: 'all', entityStatus: 'idle' }))
+        },
+        clearTodosData: (state, action: PayloadAction<null>) => {
+            return []
         }
-
-
+    },
+    selectors: {
+        selectTodolists: state => state
     }
-
 })
 
 
@@ -51,6 +55,12 @@ export const fetchTodolistsTC = (): AppThunk => {
             .then((res) => {
                 dispatch(todolistsActions.setTodolists({ todolists: res.data }))
                 dispatch(appActions.setAppStatus({ status: 'succeeded' }))
+                return res.data
+            })
+            .then(todos => {
+                todos.forEach((todo) => {
+                    dispatch(fetchTasksTC(todo.id))
+                })
             })
             .catch(error => {
                 handleServerNetworkError(error, dispatch);
@@ -98,3 +108,5 @@ export type TodolistDomainType = TodolistType & {
 
 export const todolistsReducer = slice.reducer
 export const todolistsActions = slice.actions
+export const { selectTodolists } = slice.selectors
+export const todolistsSliceName = slice.name

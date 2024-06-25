@@ -1,8 +1,8 @@
 import { UnknownAction, configureStore } from "@reduxjs/toolkit";
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { authReducer } from '../features/Login/authSlice';
-import { tasksReducer } from '../features/TodolistsList/tasksSlice';
-import { todolistsReducer } from '../features/TodolistsList/todolistsSlice';
+import { authReducer, authSliceName } from '../features/Login/authSlice';
+import { tasksReducer, tasksSliceName } from '../features/TodolistsList/tasksSlice';
+import { todolistsReducer, todolistsSliceName } from '../features/TodolistsList/todolistsSlice';
 import { appReducer, appSliceName } from './appSlice';
 
 
@@ -10,10 +10,10 @@ import { appReducer, appSliceName } from './appSlice';
 //  const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 export const store = configureStore({
 	reducer: {
-		tasks: tasksReducer,
-		todolists: todolistsReducer,
+		[tasksSliceName]: tasksReducer,
+		[todolistsSliceName]: todolistsReducer,
 		[appSliceName]: appReducer,
-		auth: authReducer
+		[authSliceName]: authReducer
 	}
 },)
 
@@ -25,3 +25,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateTy
 // export type AppDispatch = typeof store.dispatch
 // ❗ UnknownAction вместо AnyAction
 export type AppDispatch = ThunkDispatch<AppRootStateType, unknown, UnknownAction>
+
+//@ts-ignore
+window.store = store;

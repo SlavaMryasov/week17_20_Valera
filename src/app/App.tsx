@@ -1,13 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
-import './App.css'
-import { TodolistsList } from '../features/TodolistsList/TodolistsList'
-import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppRootStateType } from './store'
-import { initializeAppTC, RequestStatusType, selectIsInitialized, selectStatus } from './appSlice'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Login } from '../features/Login/Login'
-import { logoutTC } from '../features/Login/authSlice'
+import { Menu } from '@mui/icons-material'
 import {
 	AppBar,
 	Button,
@@ -17,8 +8,16 @@ import {
 	LinearProgress,
 	Toolbar,
 	Typography
-} from '@mui/material';
-import { Menu } from '@mui/icons-material'
+} from '@mui/material'
+import React, { useCallback, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
+import { Login } from '../features/Login/Login'
+import { logoutTC, selectIsLoggedIn } from '../features/Login/authSlice'
+import { TodolistsList } from '../features/TodolistsList/TodolistsList'
+import './App.css'
+import { initializeAppTC, selectIsInitialized, selectStatus } from './appSlice'
 
 type PropsType = {
 	demo?: boolean
@@ -27,7 +26,7 @@ type PropsType = {
 function App({ demo = false }: PropsType) {
 	const status = useSelector(selectStatus)
 	const isInitialized = useSelector(selectIsInitialized)
-	const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+	const isLoggedIn = useSelector(selectIsLoggedIn)
 	const dispatch = useDispatch<any>()
 
 	useEffect(() => {

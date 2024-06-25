@@ -1,31 +1,31 @@
+import { Grid, Paper } from '@mui/material'
 import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { AppRootStateType } from '../../app/store'
+import { Navigate } from 'react-router-dom'
+import { TaskStatuses } from '../../api/todolists-api'
+import { AddItemForm } from '../../components/AddItemForm/AddItemForm'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { selectIsLoggedIn } from '../Login/authSlice'
+import { Todolist } from './Todolist/Todolist'
+import { addTaskTC, removeTaskTC, selectTasks, updateTaskTC } from './tasksSlice'
 import {
+    FilterValuesType,
     addTodolistTC,
     changeTodolistTitleTC,
     fetchTodolistsTC,
-    FilterValuesType,
     removeTodolistTC,
-    TodolistDomainType,
+    selectTodolists,
     todolistsActions
 } from './todolistsSlice'
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from './tasksSlice'
-import { TaskStatuses } from '../../api/todolists-api'
-import { Grid, Paper } from '@mui/material'
-import { AddItemForm } from '../../components/AddItemForm/AddItemForm'
-import { Todolist } from './Todolist/Todolist'
-import { Navigate } from 'react-router-dom'
-import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 type PropsType = {
     demo?: boolean
 }
 
 export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
-    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const todolists = useSelector(selectTodolists)
+    const tasks = useSelector(selectTasks)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
     const dispatch = useAppDispatch()
 

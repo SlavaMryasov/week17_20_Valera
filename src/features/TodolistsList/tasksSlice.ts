@@ -1,12 +1,9 @@
-import { Dispatch } from 'redux'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { appActions } from 'src/app/appSlice'
 import { TaskPriorities, TaskStatuses, TaskType, UpdateTaskModelType, todolistsAPI } from '../../api/todolists-api'
 import { AppThunk } from '../../app/store'
-import { appActions } from 'src/app/appSlice'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { todolistsActions } from './todolistsSlice'
-
-const initialState: TasksStateType = {}
 
 const slice = createSlice({
     name: 'tasks',
@@ -46,6 +43,12 @@ const slice = createSlice({
                     state[tl.id] = []
                 })
             })
+            .addCase(todolistsActions.clearTodosData, (state, action) => {
+                return {}
+            })
+    },
+    selectors: {
+        selectTasks: state => state
     }
 })
 
@@ -133,3 +136,5 @@ export type TasksStateType = {
 
 export const tasksReducer = slice.reducer
 export const tasksActions = slice.actions
+export const { selectTasks } = slice.selectors
+export const tasksSliceName = slice.name
