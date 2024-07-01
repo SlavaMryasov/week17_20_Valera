@@ -1,6 +1,8 @@
-import { todolistsActions } from './../../../src_17/features/TodolistsList/todolistsSlice';
-import { addTaskAC, removeTaskAC, setTasksAC, tasksReducer, TasksStateType, updateTaskAC } from './tasksSlice'
-import { TaskPriorities, TaskStatuses } from '../../api/todolists-api'
+import { todolistsActions } from './todolistsSlice';
+import { fetchTasks, tasksActions, tasksReducer, TasksStateType } from './tasksSlice'
+
+
+import { TaskPriorities, TaskStatuses, TaskType } from '../../api/todolists-api'
 
 let startState: TasksStateType = {};
 beforeEach(() => {
@@ -37,7 +39,7 @@ beforeEach(() => {
 });
 
 test('correct task should be deleted from correct array', () => {
-    const action = removeTaskAC("2", "todolistId2");
+    const action = tasksActions.removeTask({ taskId: "2", todolistId: "todolistId2" });
 
     const endState = tasksReducer(startState, action)
 
@@ -47,17 +49,19 @@ test('correct task should be deleted from correct array', () => {
 });
 test('correct task should be added to correct array', () => {
     //const action = addTaskAC("juce", "todolistId2");
-    const action = addTaskAC({
-        todoListId: "todolistId2",
-        title: "juce",
-        status: TaskStatuses.New,
-        addedDate: "",
-        deadline: "",
-        description: "",
-        order: 0,
-        priority: 0,
-        startDate: "",
-        id: "id exists"
+    const action = tasksActions.addTask({
+        task: {
+            todoListId: "todolistId2",
+            title: "juce",
+            status: TaskStatuses.New,
+            addedDate: "",
+            deadline: "",
+            description: "",
+            order: 0,
+            priority: 0,
+            startDate: "",
+            id: "id exists"
+        }
     });
 
     const endState = tasksReducer(startState, action)
@@ -69,7 +73,7 @@ test('correct task should be added to correct array', () => {
     expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New);
 });
 test('status of specified task should be changed', () => {
-    const action = updateTaskAC("2", { status: TaskStatuses.New }, "todolistId2");
+    const action = tasksActions.updateTask({ taskId: "2", model: { status: TaskStatuses.New }, todolistId: "todolistId2" });
 
     const endState = tasksReducer(startState, action)
 
@@ -77,7 +81,7 @@ test('status of specified task should be changed', () => {
     expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New);
 });
 test('title of specified task should be changed', () => {
-    const action = updateTaskAC("2", { title: "yogurt" }, "todolistId2");
+    const action = tasksActions.updateTask({ taskId: "2", model: { title: "yogurt" }, todolistId: "todolistId2" });
 
     const endState = tasksReducer(startState, action)
 
@@ -124,7 +128,6 @@ test('empty arrays should be added when we set todolists', () => {
             { id: "1", title: "title 1", order: 0, addedDate: "" },
             { id: "2", title: "title 2", order: 0, addedDate: "" }
         ]
-
     })
 
     const endState = tasksReducer({}, action)
@@ -136,7 +139,46 @@ test('empty arrays should be added when we set todolists', () => {
     expect(endState['2']).toBeDefined()
 })
 test('tasks should be added for todolist', () => {
-    const action = setTasksAC(startState["todolistId1"], "todolistId1");
+    // это мы типа как будь то бы создали экшен криэйтор - это не санка
+    const action = fetchTasks.fulfilled({ tasks: startState["todolistId1"], todolistId: "todolistId1" }, //то шо санка возвращает
+        'requestId', // уникальный идентификатор запроса, для теста не важно что тут будет
+        'todolistId1'//аргументы санки
+    );
+
+    const endState = tasksReducer({
+        "todolistId2": [],
+        "todolistId1": []
+    }, action)
+
+    expect(endState["todolistId1"].length).toBe(3)
+    expect(endState["todolistId2"].length).toBe(0)
+})
+
+
+test('tasks should be added for todolist', () => {
+
+    // type Action = {
+    //     type: string
+    //     payload: {
+    //         tasks: TaskType[]
+    //         todolistId: string
+    //     }
+    // }
+
+    type Action = ReturnType<typeof fetchTasks.fulfilled>// можно так
+    type Action2 = Pick<Action, 'type' | 'payload'>
+
+    type Action3 = Pick<ReturnType<typeof fetchTasks.fulfilled>, 'type' | 'payload'> // или так
+
+    type Action4 = Omit<ReturnType<typeof fetchTasks.fulfilled>, 'meta'> // а лучше так
+
+    const action: Action4 = {
+        type: fetchTasks.fulfilled.type,
+        payload: {
+            tasks: startState["todolistId1"],
+            todolistId: "todolistId1"
+        }
+    }
 
     const endState = tasksReducer({
         "todolistId2": [],

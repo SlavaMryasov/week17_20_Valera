@@ -1,5 +1,4 @@
-import { todolistsActions } from './../../../src_17/features/TodolistsList/todolistsSlice';
-import { TodolistDomainType, todolistsReducer } from './todolistsSlice'
+import { TodolistDomainType, todolistsActions, todolistsReducer } from './todolistsSlice'
 import { tasksReducer, TasksStateType } from './tasksSlice'
 import { TodolistType } from '../../api/todolists-api'
 

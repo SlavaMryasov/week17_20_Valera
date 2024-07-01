@@ -3,8 +3,8 @@ import { Dispatch } from 'redux'
 import { appActions, RequestStatusType } from '../../app/appSlice'
 import { handleServerNetworkError } from '../../utils/error-utils'
 import { AppThunk } from '../../app/store';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { fetchTasks } from './tasksSlice';
 
 
 const slice = createSlice({
@@ -12,30 +12,40 @@ const slice = createSlice({
     initialState: [] as TodolistDomainType[],
     reducers: {
         removeTodolist: (state, action: PayloadAction<{ id: string }>) => {
-            const index = state.findIndex(tl => tl.id === action.payload.id)
+            const index = state.findIndex(todo => todo.id === action.payload.id)
             if (index !== -1) state.splice(index, 1)
         },
         addTodolist: (state, action: PayloadAction<{ todolist: TodolistType }>) => {
+            let a = current(state)
+            debugger
             state.unshift({ ...action.payload.todolist, filter: 'all', entityStatus: 'idle' })
         },
-        changeTodolistFilter: (state, action: PayloadAction<{ id: string, filter: FilterValuesType }>) => {
-            const index = state.findIndex(tl => tl.id === action.payload.id)
-            if (index !== -1) state[index].filter = action.payload.filter
-        },
         changeTodolistTitle: (state, action: PayloadAction<{ id: string, title: string }>) => {
-            const index = state.findIndex(tl => tl.id === action.payload.id)
+            const index = state.findIndex(todo => todo.id === action.payload.id)
             if (index !== -1) state[index].title = action.payload.title
         },
+        changeTodolistFilter: (state, action: PayloadAction<{ id: string, filter: FilterValuesType }>) => {
+            const index = state.findIndex(todo => todo.id === action.payload.id)
+            if (index !== -1) state[index].filter = action.payload.filter
+        },
         changeTodolistEntityStatus: (state, action: PayloadAction<{ id: string, status: RequestStatusType }>) => {
-            const index = state.findIndex(tl => tl.id === action.payload.id)
-            if (index !== -1) state[index].entityStatus = action.payload.status
+            const todolist = state.find(todo => todo.id === action.payload.id)
+            if (todolist) todolist.entityStatus = action.payload.status
         },
         setTodolists: (state, action: PayloadAction<{ todolists: Array<TodolistType> }>) => {
+            // return action.todolists.map(tl => ({ ...tl, filter: 'all', entityStatus: 'idle' }))
             action.payload.todolists.forEach(tl =>
                 state.push({ ...tl, filter: 'all', entityStatus: 'idle' }))
+        },
+        clearTodosData: (state, action: PayloadAction<null>) => {
+            return []
         }
+    },
+    selectors: {
+        selectTodolists: state => state
     }
 })
+
 
 // thunks
 export const fetchTodolistsTC = (): AppThunk => {
@@ -45,6 +55,12 @@ export const fetchTodolistsTC = (): AppThunk => {
             .then((res) => {
                 dispatch(todolistsActions.setTodolists({ todolists: res.data }))
                 dispatch(appActions.setAppStatus({ status: 'succeeded' }))
+                return res.data
+            })
+            .then(todos => {
+                todos.forEach((todo) => {
+                    dispatch(fetchTasks(todo.id))
+                })
             })
             .catch(error => {
                 handleServerNetworkError(error, dispatch);
@@ -81,8 +97,8 @@ export const changeTodolistTitleTC = (id: string, title: string): AppThunk => {
     }
 }
 
-
-
+// types
+// 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
@@ -90,8 +106,7 @@ export type TodolistDomainType = TodolistType & {
 }
 
 
-export const todolistsActions = slice.actions
 export const todolistsReducer = slice.reducer
+export const todolistsActions = slice.actions
+export const { selectTodolists } = slice.selectors
 export const todolistsSliceName = slice.name
-
-
