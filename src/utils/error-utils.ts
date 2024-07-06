@@ -2,6 +2,8 @@
 import { appActions } from 'src/app/appSlice'
 import { ResponseType } from '../api/todolists-api'
 import { Dispatch } from 'redux'
+import { AppDispatch } from 'src/app/store'
+import axios from 'axios'
 
 export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
     if (data.messages.length) {
@@ -12,7 +14,22 @@ export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatc
     dispatch(appActions.setAppStatus({ status: 'failed' }))
 }
 
-export const handleServerNetworkError = (error: { message: string }, dispatch: Dispatch) => {
-    dispatch(appActions.setAppError({ error: error.message ? error.message : 'Some error occurred' }))
-    dispatch(appActions.setAppStatus({ status: 'failed' }))
-}
+// export const handleServerNetworkError = (error: { message: string }, dispatch: Dispatch) => {
+//     dispatch(appActions.setAppError({ error: error.message ? error.message : 'Some error occurred' }))
+//     dispatch(appActions.setAppStatus({ status: 'failed' }))
+// }
+
+
+export const handleServerNetworkError = (err: unknown, dispatch: AppDispatch): void => {
+    let errorMessage = "Some error occurred";
+    if (axios.isAxiosError(err)) {
+        errorMessage = err.response?.data?.message || err?.message || errorMessage;
+    } else if (err instanceof Error) {
+        errorMessage = `Native error: ${err.message}`;
+    } else {
+        errorMessage = JSON.stringify(err);
+    }
+
+    dispatch(appActions.setAppError({ error: errorMessage }));
+    dispatch(appActions.setAppStatus({ status: "failed" }));
+};
