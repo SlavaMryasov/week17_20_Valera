@@ -1,11 +1,11 @@
 import { Delete } from '@mui/icons-material'
 import { Button, IconButton } from '@mui/material'
 import React, { useCallback } from 'react'
-import { TaskStatuses, TaskType } from '../../../api/todolists-api'
-import { AddItemForm } from '../../../components/AddItemForm/AddItemForm'
-import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
 import { FilterValuesType, TodolistDomainType } from '../todolistsSlice'
 import { Task } from './Task/Task'
+import { TaskType, TaskStatuses } from 'src/api/todolists-api'
+import { AddItemForm } from 'src/common/components/AddItemForm/AddItemForm'
+import { EditableSpan } from 'src/common/components/EditableSpan/EditableSpan'
 
 type PropsType = {
     todolist: TodolistDomainType

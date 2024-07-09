@@ -1,9 +1,9 @@
 import { UnknownAction, configureStore } from "@reduxjs/toolkit";
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { authReducer, authSliceName } from '../features/Login/authSlice';
 import { tasksReducer, tasksSliceName } from '../features/TodolistsList/tasksSlice';
 import { todolistsReducer, todolistsSliceName } from '../features/TodolistsList/todolistsSlice';
 import { appReducer, appSliceName } from './appSlice';
+import { authReducer, authSliceName } from "src/features/auth/model/authSlice";
 
 
 // ❗старая запись, с новыми версиями не работает

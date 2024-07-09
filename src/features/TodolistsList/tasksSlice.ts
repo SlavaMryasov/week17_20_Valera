@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { appActions } from 'src/app/appSlice'
-import { createAppAsyncThunk } from 'src/utils/createAppAsyncThunk'
-import { TaskPriorities, TaskStatuses, TaskType, UpdateTaskModelType, todolistsAPI } from '../../api/todolists-api'
-import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
-import { addTodolist, removeTodolist, todolistsActions } from './todolistsSlice'
+import { createSlice } from "@reduxjs/toolkit"
+import { TaskType, todolistsAPI, UpdateTaskModelType, TaskStatuses, TaskPriorities } from "src/api/todolists-api"
+import { appActions } from "src/app/appSlice"
+import { createAppAsyncThunk, handleServerNetworkError, handleServerAppError } from "src/common/utils"
+import { addTodolist, removeTodolist, todolistsActions } from "./todolistsSlice"
+
 
 const slice = createSlice({
     name: 'tasks',

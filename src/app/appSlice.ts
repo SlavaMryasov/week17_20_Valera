@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
-import { authActions } from 'src/features/Login/authSlice';
-import { authAPI } from '../api/todolists-api';
+import { authAPI } from 'src/features/auth/api/authApi';
+import { authActions } from 'src/features/auth/model/authSlice';
+
+
 
 
 

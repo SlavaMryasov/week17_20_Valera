@@ -1,16 +1,10 @@
-// import { authReducer } from './auth-reducer';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk } from 'src/app/store'
-import { authAPI, LoginParamsType } from '../../api/todolists-api'
-// import { setAppStatusAC } from '../../app/appSlice'
-import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
-import { appActions } from 'src/app/appSlice'
-import { todolistsActions } from '../TodolistsList/todolistsSlice'
-
-
-// const initialState: InitialStateType = {
-//     isLoggedIn: false
-// }
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { LoginParamsType, authAPI } from "src/api/todolists-api"
+import { appActions } from "src/app/appSlice"
+import { AppThunk } from "src/app/store"
+import { handleServerAppError } from "src/common/utils/handleServerAppError"
+import { handleServerNetworkError } from "src/common/utils/handleServerNetworkError"
+import { todolistsActions } from "../TodolistsList/todolistsSlice"
 
 
 const slice = createSlice({

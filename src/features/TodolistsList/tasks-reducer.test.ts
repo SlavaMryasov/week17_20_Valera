@@ -1,7 +1,7 @@
-import { Action } from 'src/common/actions/types/types';
-import { TaskPriorities, TaskStatuses } from '../../api/todolists-api';
-import { addTask, fetchTasks, removeTask, tasksReducer, TasksStateType, updateTask } from './tasksSlice';
-import { todolistsActions } from './todolistsSlice';
+import { Action } from 'src/common/types'
+import { TasksStateType, removeTask, tasksReducer, addTask, updateTask, fetchTasks } from './tasksSlice';
+import { addTodolist, removeTodolist, todolistsActions } from './todolistsSlice';
+import { TaskStatuses, TaskPriorities } from 'src/common/enum/enum';
 
 let startState: TasksStateType = {};
 beforeEach(() => {
@@ -112,55 +112,65 @@ test('title of specified task should be changed', () => {
     expect(endState["todolistId2"][1].title).toBe("yogurt");
     expect(endState["todolistId2"][0].title).toBe("bread");
 });
-// test('new array should be added when new todolist is added', () => {
-//     const action = todolistsActions.addTodolist({
-//         todolist: {
-//             id: "blabla",
-//             title: "new todolist",
-//             order: 0,
-//             addedDate: ''
-//         }
-//     });
+test('new array should be added when new todolist is added', () => {
 
-//     const endState = tasksReducer(startState, action)
+    const action: Action<typeof addTodolist.fulfilled> = {
+        type: addTodolist.fulfilled.type,
+        payload: {
+            todolist: {
+                id: "blabla",
+                title: "new todolist",
+                order: 0,
+                addedDate: ''
+            }
+        }
+    }
+
+    const endState = tasksReducer(startState, action)
 
 
-//     const keys = Object.keys(endState);
-//     const newKey = keys.find(k => k != "todolistId1" && k != "todolistId2");
-//     if (!newKey) {
-//         throw Error("new key should be added")
-//     }
+    const keys = Object.keys(endState);
+    const newKey = keys.find(k => k != "todolistId1" && k != "todolistId2");
+    if (!newKey) {
+        throw Error("new key should be added")
+    }
 
-//     expect(keys.length).toBe(3);
-//     expect(endState[newKey]).toEqual([]);
-// });
-// test('propertry with todolistId should be deleted', () => {
-//     const action = todolistsActions.removeTodolist({ id: "todolistId2" });
+    expect(keys.length).toBe(3);
+    expect(endState[newKey]).toEqual([]);
+});
+test('propertry with todolistId should be deleted', () => {
+    // const action = todolistsActions.removeTodolist({ id: "todolistId2" });
+    const action: Action<typeof removeTodolist.fulfilled> = {
+        type: removeTodolist.fulfilled.type,
+        payload: {
+            todolistId: 'todolistId2'
+        }
+    }
 
-//     const endState = tasksReducer(startState, action)
+    const endState = tasksReducer(startState, action)
 
-//     const keys = Object.keys(endState);
+    const keys = Object.keys(endState);
 
-//     expect(keys.length).toBe(1);
-//     expect(endState["todolistId2"]).not.toBeDefined();
-// });
+    expect(keys.length).toBe(1);
+    expect(endState["todolistId2"]).not.toBeDefined();
+});
 
-// test('empty arrays should be added when we set todolists', () => {
-//     const action = todolistsActions.setTodolists({
-//         todolists: [
-//             { id: "1", title: "title 1", order: 0, addedDate: "" },
-//             { id: "2", title: "title 2", order: 0, addedDate: "" }
-//         ]
-//     })
+test('empty arrays should be added when we set todolists', () => {
+    const action = todolistsActions.setTodolists({
+        todolists: [
+            { id: "1", title: "title 1", order: 0, addedDate: "" },
+            { id: "2", title: "title 2", order: 0, addedDate: "" }
+        ]
+    })
 
-//     const endState = tasksReducer({}, action)
+    const endState = tasksReducer({}, action)
 
-//     const keys = Object.keys(endState)
+    const keys = Object.keys(endState)
 
-//     expect(keys.length).toBe(2)
-//     expect(endState['1']).toBeDefined()
-//     expect(endState['2']).toBeDefined()
-// })
+    expect(keys.length).toBe(2)
+    expect(endState['1']).toBeDefined()
+    expect(endState['2']).toBeDefined()
+})
 test('tasks should be added for todolist', () => {
     // это мы типа как будь то бы создали экшен криэйтор - это не санка
     const action = fetchTasks.fulfilled({ tasks: startState["todolistId1"], todolistId: "todolistId1" }, //то шо санка возвращает

@@ -12,12 +12,13 @@ import {
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
-import { Login } from '../features/Login/Login'
-import { logoutTC, selectIsLoggedIn } from '../features/Login/authSlice'
+import { Login } from '../features/auth/ui/Login'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import './App.css'
 import { initializeAppTC, selectIsInitialized, selectStatus } from './appSlice'
+import { selectIsLoggedIn, logoutTC } from 'src/features/auth/model/authSlice'
+import { ErrorSnackbar } from 'src/common/components'
+
 
 type PropsType = {
 	demo?: boolean
