@@ -15,8 +15,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Login } from '../features/auth/ui/Login'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import './App.css'
-import { initializeAppTC, selectIsInitialized, selectStatus } from './appSlice'
-import { selectIsLoggedIn, logoutTC } from 'src/features/auth/model/authSlice'
+import { selectIsInitialized, selectStatus } from './appSlice'
+import { selectIsLoggedIn, logout, initializeApp } from 'src/features/auth/model/authSlice'
 import { ErrorSnackbar } from 'src/common/components'
 
 
@@ -31,11 +31,11 @@ function App({ demo = false }: PropsType) {
 	const dispatch = useDispatch<any>()
 
 	useEffect(() => {
-		dispatch(initializeAppTC())
+		dispatch(initializeApp(true))
 	}, [])
 
 	const logoutHandler = useCallback(() => {
-		dispatch(logoutTC())
+		dispatch(logout())
 	}, [])
 
 	if (!isInitialized) {

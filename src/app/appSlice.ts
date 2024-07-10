@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
+import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from 'src/common/utils';
 import { authAPI } from 'src/features/auth/api/authApi';
 import { authActions } from 'src/features/auth/model/authSlice';
 
@@ -32,15 +33,17 @@ const slice = createSlice({
     }
 })
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    authAPI.me().then(res => {
-        if (res.data.resultCode === 0) {
-            dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
-        } else {
-        }
-        dispatch(appActions.setAppInitialized({ isInitialized: true }));
-    })
-}
+
+
+// export const initializeAppTC = () => (dispatch: Dispatch) => {
+//     authAPI.me().then(res => {
+//         if (res.data.resultCode === 0) {
+//             dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
+//         } else {
+//         }
+//         dispatch(appActions.setAppInitialized({ isInitialized: true }));
+//     })
+// }
 
 export const appReducer = slice.reducer
 export const appActions = slice.actions
