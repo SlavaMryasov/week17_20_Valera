@@ -3,8 +3,8 @@ import { useFormik } from 'formik'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import { loginTC, selectIsLoggedIn } from '../authSlice'
 import { useAppDispatch } from 'src/common/hooks/useAppDispatch'
+import { loginTC, selectIsLoggedIn } from '../model/authSlice'
 
 export const Login = () => {
     const dispatch = useAppDispatch()

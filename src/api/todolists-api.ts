@@ -1,6 +1,6 @@
 import { TaskPriorities, TaskStatuses } from 'src/common/enum/enum';
 import { instance } from 'src/common/instance/instance';
-import { ResponseType } from "src/common/types/types";
+import { BaseResponse } from 'src/common/types';
 
 
 
@@ -11,29 +11,29 @@ export const todolistsAPI = {
         return promise;
     },
     createTodolist(title: string) {
-        const promise = instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', { title: title });
+        const promise = instance.post<BaseResponse<{ item: TodolistType }>>('todo-lists', { title: title });
         return promise;
     },
     deleteTodolist(id: string) {
-        const promise = instance.delete<ResponseType>(`todo-lists/${id}`);
+        const promise = instance.delete<BaseResponse>(`todo-lists/${id}`);
         return promise;
     },
     updateTodolist(id: string, title: string) {
-        const promise = instance.put<ResponseType>(`todo-lists/${id}`, { title: title });
+        const promise = instance.put<BaseResponse>(`todo-lists/${id}`, { title: title });
         return promise;
     },
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
     deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`);
+        return instance.delete<BaseResponse>(`todo-lists/${todolistId}/tasks/${taskId}`);
     },
     createTask(arg: { title: string, todolistId: string }) {
         const { todolistId, title } = arg
-        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, { title });
+        return instance.post<BaseResponse<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, { title });
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
+        return instance.put<BaseResponse<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
     }
 }
 

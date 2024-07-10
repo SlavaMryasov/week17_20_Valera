@@ -3,9 +3,10 @@ import { Button, IconButton } from '@mui/material'
 import React, { useCallback } from 'react'
 import { FilterValuesType, TodolistDomainType } from '../todolistsSlice'
 import { Task } from './Task/Task'
-import { TaskType, TaskStatuses } from 'src/api/todolists-api'
 import { AddItemForm } from 'src/common/components/AddItemForm/AddItemForm'
 import { EditableSpan } from 'src/common/components/EditableSpan/EditableSpan'
+import { TaskType } from 'src/api/todolists-api'
+import { TaskStatuses } from 'src/common/enum/enum'
 
 type PropsType = {
     todolist: TodolistDomainType

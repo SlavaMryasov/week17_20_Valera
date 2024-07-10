@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { TaskType, todolistsAPI, UpdateTaskModelType, TaskStatuses, TaskPriorities } from "src/api/todolists-api"
+import { TaskType, todolistsAPI, UpdateTaskModelType } from "src/api/todolists-api"
 import { appActions } from "src/app/appSlice"
 import { createAppAsyncThunk, handleServerNetworkError, handleServerAppError } from "src/common/utils"
 import { addTodolist, removeTodolist, todolistsActions } from "./todolistsSlice"
+import { TaskPriorities, TaskStatuses } from "src/common/enum"
+
 
 
 const slice = createSlice({
