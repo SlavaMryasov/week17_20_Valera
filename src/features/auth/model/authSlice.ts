@@ -46,8 +46,9 @@ export const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsTyp
                 dispatch(appActions.setAppStatus({ status: 'succeeded' }))
                 return { isLoggedIn: true }
             } else {
+                console.log(res.data)
                 handleServerAppError(res.data, dispatch)
-                return rejectWithValue(null)
+                return rejectWithValue(res.data)
             }
         }
         catch (err) {
@@ -66,7 +67,7 @@ export const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
                 dispatch(todolistsActions.clearTodosData(null))
                 return { isLoggedIn: false }
             } else {
-                handleServerAppError(res.data, dispatch)
+                handleServerAppError(res.data, dispatch, false)
                 return rejectWithValue(null)
             }
         }
@@ -85,7 +86,7 @@ export const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, any>(
             if (res.data.resultCode === 0) {
                 return { isLoggedIn: true };
             } else {
-                // handleServerAppError(res.data, dispatch);
+                handleServerAppError(res.data, dispatch);
                 return rejectWithValue(null);
             }
         }
