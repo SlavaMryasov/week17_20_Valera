@@ -26,18 +26,19 @@ export const Login = () => {
 
         // },
         initialValues: {
-            email: '',
-            password: '',
+            email: process.env.REACT_APP_EMAIL || '',
+            password: process.env.REACT_APP_PASSWORD || '',
             rememberMe: false
         },
         onSubmit: (values, formikHelpers) => {
-
             dispatch(login(values))
                 .unwrap() // пропуск then
                 .catch(err => {
-                    err.fieldsErrors.forEach((el: any) => {
-                        formikHelpers.setFieldError(el.field, el.error)
-                    })
+                    if (err.fieldsErrors) {
+                        err.fieldsErrors.forEach((el: any) => {
+                            formikHelpers.setFieldError(el.field, el.error)
+                        })
+                    }
                 })
         },
     })
@@ -54,7 +55,7 @@ export const Login = () => {
                     <FormLabel>
                         <p>
                             To log in get registered <a href={'https://social-network.samuraijs.com/'}
-                                target={'_blank'}>here</a>
+                                target={'blank'}>here</a>
                         </p>
                         <p>
                             or use common test account credentials:

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 import { appActions } from "src/app/appSlice"
 import { handleServerAppError } from "src/common/utils/handleServerAppError"
 import { handleServerNetworkError } from "src/common/utils/handleServerNetworkError"
@@ -46,8 +46,9 @@ export const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsTyp
                 dispatch(appActions.setAppStatus({ status: 'succeeded' }))
                 return { isLoggedIn: true }
             } else {
-                console.log(res.data)
-                handleServerAppError(res.data, dispatch)
+                //@ts-ignore
+                const isShowAppError = !res.data.fieldsErrors.length
+                handleServerAppError(res.data, dispatch, isShowAppError)
                 return rejectWithValue(res.data)
             }
         }
