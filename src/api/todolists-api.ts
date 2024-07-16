@@ -70,3 +70,9 @@ type GetTasksResponse = {
     totalCount: number
     items: TaskType[]
 }
+
+
+export type AddTaskArgType = {
+    title: string
+    todolistId: string
+}
